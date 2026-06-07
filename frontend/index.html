@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单商城</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>用户服务</h2>
+        <button onclick="getUser()">查询用户 ID=1</button>
+        <pre id="user-result">点击按钮查看结果</pre>
+    </div>
+
+    <div class="card">
+        <h2>订单服务</h2>
+        <button onclick="getOrder()">查询订单 ID=1</button>
+        <button onclick="getOrderWithUser()">查询订单+用户信息</button>
+        <pre id="order-result">点击按钮查看结果</pre>
+    </div>
+
+    <script>
+        const API_BASE = 'http://106.53.219.214:10010';
+
+        async function getUser() {
+            try {
+                const res = await fetch(`${API_BASE}/user/1`);
+                const data = await res.json();
+                document.getElementById('user-result').textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                document.getElementById('user-result').textContent = '错误: ' + e.message;
+            }
+        }
+
+        async function getOrder() {
+            try {
+                const res = await fetch(`${API_BASE}/order/1`);
+                const data = await res.json();
+                document.getElementById('order-result').textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                document.getElementById('order-result').textContent = '错误: ' + e.message;
+            }
+        }
+
+        async function getOrderWithUser() {
+            try {
+                const res = await fetch(`${API_BASE}/order/1/with-user`);
+                const data = await res.json();
+                document.getElementById('order-result').textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                document.getElementById('order-result').textContent = '错误: ' + e.message;
+            }
+        }
+    </script>
+</body>
+</html>

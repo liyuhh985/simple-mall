@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  nacos:
+    image: nacos/nacos-server:v2.2.3
+    container_name: nacos
+    environment:
+      MODE: standalone
+    ports:
+      - "8848:8848"
+    networks:
+      - mall-network
+
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "10010:10010"
+    environment:
+      - NACOS_ADDR=nacos:8848
+    depends_on:
+      - nacos
+    networks:
+      - mall-network
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    environment:
+      - NACOS_ADDR=nacos:8848
+    depends_on:
+      - nacos
+    networks:
+      - mall-network
+
+  order-service:
+    build: ./order-servicecontainer_name: order-service
+    ports:
+      - "8082:8081"
+    environment:
+      - NACOS_ADDR=nacos:8848
+    depends_on:
+      - nacos
+    networks:
+      - mall-network
+
+networks:
+  mall-network:
+    driver: bridge
